@@ -122,3 +122,13 @@ while True:
     print('Вы исчерпали все попытки. \n Не угадано букв:'
       +str(len(missedLetters)+'и угадано букв:' + str(len(correctLetters))+'. Было загадо слово'+secretWords+'.'
             gameIsDone = True
+
+    # спрашивает, хочет ли игрок сыграть заново (только если игра завершена)
+    if gameIsDone:
+        if playAgain():
+            missedLetters = ''
+            correctLetters = ''
+            gameIsDone = False
+            secretWord = getRandomWord()
+        else:
+            break
