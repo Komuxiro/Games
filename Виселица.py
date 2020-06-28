@@ -1,4 +1,4 @@
-# Висилица/Hangman
+# Виселица/Hangman
 import random
 
 HANGMAN_PICS = ['''
@@ -49,7 +49,7 @@ def getRandomWord(wordList):
     wordIndex = random.randint(0, len(words) - 1)
     return wordList[wordIndex]
 
-
+# отображаем игровое поле с введенными буквами и теми которые угаданы или нет
 def displayBoard(missedLetters, correctLetters, secretWord):
     print(HANGMAN_PICS[len(missedLetters)])
     print()
@@ -75,8 +75,8 @@ def getGuess(alreadyGuessed):
     while True:
         print('Введите букву.')
         guess = input()
-        guess = guess.Lower()
-        if len(guess) != 1:
+        guess = guess.lower()
+        if len(guess) != 1: # проверяем что введено не более одного символа
             print('Пожалуйста, введите одну букву.')
         elif guess in alreadyGuessed:
             print('Вы уже называли эту букву, назовите другую.')
@@ -91,12 +91,12 @@ def playAgain():
     print('Хотите сиграть еще? (да или нет)')
     return input().lower().startswith('д')
 
-
+# далее идет оснвной игровой цикл
 print('В И С Е Л И Ц А')
 missedLetters = ''
 correctLetters = ''
 secretWord = getRandomWord(words)
-gameIsDone = False
+gameIsDone = False # данной переменной присвоится значение True в случае, когда поступит сигнал завершения игры и если игрок захочет сыграть еще
 
 while True:
     displayBoard(missedLetters, correctLetters, secretWord)
@@ -105,7 +105,7 @@ while True:
 
     if guess in secretWord:
         correctLetters = correctLetters + guess
-        # проверяет, выиграл ли игрок
+        # проверяет, выиграл ли игрок сравнивая каждую букву загаданного слова с введенными буквами
         foundAllLetters = True
         for i in range(len(secretWord)):
             if secretWord[i] not in correctLetters:
@@ -119,9 +119,9 @@ while True:
         # проверяет, превысил ли игрок лимит попыток и проиграл
         if len(missedLetters) == len(HANGMAN_PICS) -1:
             displayBoard(missedLetters,correctLetters,secretWord)
-    print('Вы исчерпали все попытки. \n Не угадано букв:'
-      +str(len(missedLetters)+'и угадано букв:' + str(len(correctLetters))+'. Было загадо слово'+secretWords+'.'
-            gameIsDone = True
+    print('Вы исчерпали все попытки.\nНе угадано букв:'
+      +str(len(missedLetters))+'и угадано букв:' +str(len(correctLetters))+'. Было загадо слово "'+secretWord+'".')
+    gameIsDone = True
 
     # спрашивает, хочет ли игрок сыграть заново (только если игра завершена)
     if gameIsDone:
@@ -129,6 +129,6 @@ while True:
             missedLetters = ''
             correctLetters = ''
             gameIsDone = False
-            secretWord = getRandomWord()
+            secretWord = getRandomWord(words)
         else:
             break
