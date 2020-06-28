@@ -119,16 +119,16 @@ while True:
         # проверяет, превысил ли игрок лимит попыток и проиграл
         if len(missedLetters) == len(HANGMAN_PICS) -1:
             displayBoard(missedLetters,correctLetters,secretWord)
-    print('Вы исчерпали все попытки.\nНе угадано букв:'
-      +str(len(missedLetters))+'и угадано букв:' +str(len(correctLetters))+'. Было загадо слово "'+secretWord+'".')
+    print('Вы исчерпали все попытки.\n Не угадано букв:'
+      +str(len(missedLetters))+' и угадано букв:' +str(len(correctLetters))+'. Было загадано слово "'+secretWord+'".')
     gameIsDone = True
 
     # спрашивает, хочет ли игрок сыграть заново (только если игра завершена)
     if gameIsDone:
         if playAgain():
-            missedLetters = ''
-            correctLetters = ''
+            missedLetters = ''   # если новая игра то обнуляем это значение
+            correctLetters = ''  # если новая игра то обнуляем это значение
             gameIsDone = False
-            secretWord = getRandomWord(words)
+            secretWord = getRandomWord(words) # если новая игра то выбирается новове слово
         else:
             break
