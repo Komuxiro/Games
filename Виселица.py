@@ -80,7 +80,7 @@ def getGuess(alreadyGuessed):
             print('Пожалуйста, введите одну букву.')
         elif guess in alreadyGuessed:
             print('Вы уже называли эту букву, назовите другую.')
-        elif guess not in 'абвгдеёжзклмнопрстуфхцчшщъьэюя':
+        elif guess not in 'абвгдеёжзклмнопрстуфхцчшщъьэюяй':
             print('Пожалуйста, введите букву.')
         else:
             return guess
@@ -119,7 +119,7 @@ while True:
         # проверяет, превысил ли игрок лимит попыток и проиграл
         if len(missedLetters) == len(HANGMAN_PICS) -1:
             displayBoard(missedLetters,correctLetters,secretWord)
-    print('Вы исчерпали все попытки.\n Не угадано букв:'
+    print('Вы исчерпали все попытки.\nНе угадано букв:'
       +str(len(missedLetters))+' и угадано букв:' +str(len(correctLetters))+'. Было загадано слово "'+secretWord+'".')
     gameIsDone = True
 
