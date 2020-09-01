@@ -61,7 +61,7 @@ def getBoardCopy(board):
 
 # вернем true, если сделан ход в свободную клетку
 def isSpaceFree(board, move):
-    return board, move == ''
+    return board, move == ' '
 
 
 # разрешаем игроку сделать ход
@@ -122,7 +122,7 @@ def getComputerMove(board, computerLetter):
     return chooseRandomMoveFromList(board, [2, 4, 6, 8])
 
 
-# возвращаем true, если клекта на игровом поле загята, в противном случае false
+# возвращаем true, если клекта на игровом поле занята, в противном случае false
 def isBoardFull(board):
     for i in range(1, 10):
         if isSpaceFree(board, i):
@@ -148,7 +148,7 @@ while True:
 
             if isWinner(theBoard, playerLetter):
                 drawBoard(theBoard)
-                print('Ура! Вы выйграли')
+                print('Ура! Вы выиграли')
                 gameIsPlaying = False
             else:
                 if isBoardFull(theBoard):
