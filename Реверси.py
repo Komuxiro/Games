@@ -132,3 +132,52 @@ def getBoardCopy(board):
 
     return boardCopy
 
+def isOnCorner(x,y):
+    # вернуть true если указанная позиция находится в одном из 4-х углов
+    return (x==0 or x==WIDTH-1) and (y==0 or y==HEIGHT-1)
+
+def getPlayerMove(board,playerTile):
+    # позволить игроку ввести свой ход
+    # вернуть вход в виде (x,y) (или вернуть строки 'подсказка' или 'выход')
+    DIGITSIT08= '1 2 3 4 5 6 7 8'.split()
+    while True:
+        print('Укажите ход, текст "выход" для завершения игры или "подсказка" для вызова подсказки.')
+            move = input().lower()
+            if move== 'выход' or move == 'подсказка':
+                return move
+
+            if len(move) ==2 and move[0] in DIGITSIT08 and move[1 in DIGITSIT08]:
+                x = int(move[0])-1
+                y = int(move[1])-1
+                if isValidMove(board,playerTile,x,y)==False:
+                    continue
+                else:
+                    break
+            else:
+                print('Это недопустимый ход.Введите номер столбца (1-8) и номер ряда (1-8).')
+                print('К примеру, значение 81 перемещает в верхний правый угол.')
+
+        return [x,y]
+
+def getComputerMove(board,computerTile):
+    # учитывая данное игровое поле и данную фишку компьютера, определить
+    # куда сделать ход и вернуть этот ход в виде списка [x,y]
+    possibleMoves = getValidMoves(board, computerTile)
+    random.shuffle(possibleMoves) # сделать случайным порядок ходов
+
+    # всегда делать ход в угол, если это возможно
+    for x,y in possibleMoves:
+        if isOnCorner(x,y):
+            return [x,y]
+
+    # найти ход с наибольшим возможным количеством очков
+    bestScore = -1
+    for x,y in possibleMoves:
+        boardCopy = getBoardCopy(board)
+        makeMove(boardCopy,computerTile,x,y)
+        score = getScoreOfBoard(boardCopy)[computerTile]
+        if score > bestScore:
+            bestMove = [x,y]
+            bestScore = score
+    return bestMove
+
