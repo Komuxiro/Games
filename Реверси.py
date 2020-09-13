@@ -181,3 +181,79 @@ def getComputerMove(board,computerTile):
             bestScore = score
     return bestMove
 
+def printScore(board, playerTile,computerTile):
+    score = getScoreOfBoard(board)
+    print('Ваш счте: %s' % (score[playerTile], score[computerTile]))
+
+def playGame(playerTile, computerTile):
+    showHints = False
+    turn = whoGoesFirst()
+    print( turn + ' ходит первым')
+
+    # очистить игровое поле и выставить стартовын фишки
+    board = getNewBoard()
+    board = [3][3] = 'X'
+    board = [3][4] = 'O'
+    board = [4][3] = 'O'
+    board = [4][4] = 'X'
+
+    while True:
+        playerValidMoves = getValidMoves(board, playerTile)
+        computerValidMoves = getValidMoves(board, computerTile)
+
+        if playerValidMoves == [] and computerValidMoves == []:
+            return board # ходов нет ни у кого - закончить игру
+
+        elif turn =='Человек': # ход человека
+            if playerValidMoves != []:
+                    if showHints:
+                        validMovesBoard = getBoardWithValidMoves(board, playerTile)
+                        drawBoard(validMovesBoard)
+                    else:
+                        drawBoard(board)
+                    printScore(board, playerTile, computerTile)
+
+                    move = getPlayerMove(board, playerTile)
+                    if move == 'выход':
+                        print('Спасибо за игру')
+                        sys.exit() # завершить работу программы
+                    elif move == 'подсказка':
+                        showHints = not showHints
+                        continue
+                    else:
+                        makeMove(board, playerTile, move[0], move[1])
+                turn = 'Компьютер'
+
+        elif turn == 'Компьютер': # ход компьютера
+            if computerValidMoves != []:
+                drawBoard(board)
+                printScore(board, playerTile, computerTile)
+
+                input('Нажмите клавишу Enter для просмотра хода компьютера.')
+                move = getComputerMove(board, computerTile)
+                makeMove(board, computerTile, move[0], move [1])
+            turn = 'Человек'
+
+
+
+print('Привестствуем в игре "Реверси"!')
+
+playerTile, computerTile = enterPlayerTile()
+
+while True:
+    finalBoard = playGame(playerTile, computerTile)
+
+    #отобразить итоговый счет
+    drawBoard(finalBoard)
+    scores = getScoreOfBoard(finalBoard)
+    print('X набрал %s очков. O набрал %s очков' % (scores['X'], scores['O']))
+    if scores [playerTile] > scores [computerTile]:
+        print('Вы победили компьютер, обогнав его на %s очков.' % (scores[playerTile] - scores[computerTile]))
+    elif scores[playerTile] < scores[computerTile]:
+        print('Вы проиграли. Компьюетр победил вас, обогнав на %s очков.' % (scores[computerTile] - scores[playerTile]))
+    else:
+        print('Ничья')
+
+    print('Хотите сыграть еще раз? (да или нет)')
+    if not input().lower().startswith('д'):
+        break
