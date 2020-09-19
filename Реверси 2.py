@@ -234,26 +234,29 @@ def playGame(playerTile, computerTile):
                 makeMove(board, computerTile, move[0], move [1])
             turn = 'Человек'
 
-
-
+NUM_GAMES = 250
+xWins = oWins = ties = 0
 print('Привестствуем в игре "Реверси"!')
 
 playerTile, computerTile = ['X', 'O'] #enterPlayerTile()
 
-while True:
+for i in range(NUM_GAMES): #while True:
     finalBoard = playGame(playerTile, computerTile)
 
     #отобразить итоговый счет
-    drawBoard(finalBoard)
+    #drawBoard(finalBoard)
     scores = getScoreOfBoard(finalBoard)
-    print('X набрал %s очков. O набрал %s очков' % (scores['X'], scores['O']))
+    print('#%s: X набрал %s очков. O набрал %s очков' % (i + 1, scores['X'], scores['O']))
     if scores [playerTile] > scores [computerTile]:
-        print('Вы победили компьютер, обогнав его на %s очков.' % (scores[playerTile] - scores[computerTile]))
+        xWins+=1 #print('Вы победили компьютер, обогнав его на %s очков.' % (scores[playerTile] - scores[computerTile]))
     elif scores[playerTile] < scores[computerTile]:
-        print('Вы проиграли. Компьюетр победил вас, обогнав на %s очков.' % (scores[computerTile] - scores[playerTile]))
+        oWins+=1 #print('Вы проиграли. Компьюетр победил вас, обогнав на %s очков.' % (scores[computerTile] - scores[playerTile]))
     else:
-        print('Ничья')
+        ties +=1 #print('Ничья')
 
-    print('Хотите сыграть еще раз? (да или нет)')
-    if not input().lower().startswith('д'):
-        break
+    #print('Хотите сыграть еще раз? (да или нет)')
+    #if not input().lower().startswith('д'):
+        #break
+print('Количество выиграшей X: %s (%s%%)' %(xWins, round(xWins/NUM_GAMES *100, 1)))
+print('Количество выиграшей O: %s (%s%%)' %(oWins, round(oWins/NUM_GAMES *100, 1)))
+print('Количество выиграшей: %s (%s%%)' %(ties, round(ties/NUM_GAMES *100, 1)))
