@@ -159,7 +159,7 @@ def getPlayerMove(board,playerTile):
 
         return [x,y]
 
-def getComputerMove(board,computerTile):
+def getCornerBestMove(board,computerTile):
     # учитывая данное игровое поле и данную фишку компьютера, определить
     # куда сделать ход и вернуть этот ход в виде списка [x,y]
     possibleMoves = getValidMoves(board, computerTile)
@@ -181,25 +181,49 @@ def getComputerMove(board,computerTile):
             bestScore = score
     return bestMove
 
-def printScore(board, playerTile,computerTile):
-    score = getScoreOfBoard(board)
-    print('Ваш счте: %s' % (score[playerTile], score[computerTile]))
+def getWorstMove (board, tile):
+    # вернуть ход, который переворачивает  меньше всего фишек
+    possibleMoves = getValidMoves(board, tile)
+    random.shuffle(possibleMoves)
 
-def playGame(playerTile, computerTile):
-    showHints = False
-    turn = whoGoesFirst()
-    print( turn + ' ходит первым')
+# найти ход с наименьшим возможным количеством очков
+    worstScore = 64
+    for x,y in possibleMoves:
+        boardCopy = getBoardCopy(board)
+        makeMove(boardCopy, tile, x,y)
+        score = getScoreOfBoard(boardCopy)[tile]
+        if score < worstScore:
+            worstScore = [x,y]
+            worstScore = score
 
-    # очистить игровое поле и выставить стартовын фишки
-    board = getNewBoard()
-    board = [3][3] = 'X'
-    board = [3][4] = 'O'
-    board = [4][3] = 'O'
-    board = [4][4] = 'X'
+    return worstScore
 
-    while True:
-        playerValidMoves = getValidMoves(board, playerTile)
-        computerValidMoves = getValidMoves(board, computerTile)
+def getRandomMove (board, tile):
+    possibleMoves = getValidMoves(board, tile)
+    return random.choice(possibleMoves)
+
+def isOnSide (x,y):
+    return  x==0 or x ==WIDTH -1 or y ==0 or y == HEIGHT-1
+
+def getCornerSideBestMoves(board, tile):
+    # вернуть угловой ход , граничный ход или лучший ход
+    possibleMoves = getValidMoves(board, tile)
+    random.shuffle(possibleMoves) # сделать случайным порядок ходов
+
+    # вседа делать ход в угол, если это возможно
+    for x,y in possibleMoves:
+        if isOnCorner(x,y):
+            return [x,y]
+
+    # если сделать ход не получается, вернуть граничный ход
+    for x,y in possibleMoves:
+        if isOnCorner(x,y):
+            return [x,y]
+
+    return getCornerSideBestMoves(board,tile) #делть то что делал бы обычный ИИ
+
+def printScore(board, playerTile, computerTile):
+
 
         if playerValidMoves == [] and computerValidMoves == []:
             return board # ходов нет ни у кого - закончить игру
@@ -213,7 +237,7 @@ def playGame(playerTile, computerTile):
                     #    drawBoard(board)
                     #printScore(board, playerTile, computerTile)
 
-                    move = getComputerMove(board, playerTile)
+                    move = getCornerBestMove(board, playerTile)
                     #if move == 'выход':
                     #    print('Спасибо за игру')
                     #    sys.exit() # завершить работу программы
@@ -230,12 +254,12 @@ def playGame(playerTile, computerTile):
                 #printScore(board, playerTile, computerTile)
 
                 #input('Нажмите клавишу Enter для просмотра хода компьютера.')
-                move = getComputerMove(board, computerTile)
+                move = getWorstMove(board, computerTile)
                 makeMove(board, computerTile, move[0], move [1])
             turn = 'Человек'
 
-NUM_GAMES = 250
-xWins = oWins = ties = 0
+NUM_GAMES = 250 # параметр определяет сколько партий будет сыграно
+xWins = oWins = ties = 0 #  переменные отслеживают победы и ничьи
 print('Привестствуем в игре "Реверси"!')
 
 playerTile, computerTile = ['X', 'O'] #enterPlayerTile()
@@ -257,6 +281,6 @@ for i in range(NUM_GAMES): #while True:
     #print('Хотите сыграть еще раз? (да или нет)')
     #if not input().lower().startswith('д'):
         #break
-print('Количество выиграшей X: %s (%s%%)' %(xWins, round(xWins/NUM_GAMES *100, 1)))
+print('Количество выиграшей X: %s (%s%%)' %(xWins, round(xWins/NUM_GAMES *100, 1))) # вывод процента побед
 print('Количество выиграшей O: %s (%s%%)' %(oWins, round(oWins/NUM_GAMES *100, 1)))
 print('Количество выиграшей: %s (%s%%)' %(ties, round(ties/NUM_GAMES *100, 1)))
