@@ -20,9 +20,9 @@ GREEN = (0,255,0)
 foodCounter = 0
 NEWFOOD= 40
 FOODSIZE = 20
-player = pygame.Rect(300,100,50,50)
+player = pygame.Rect(300,100,50,50) # местоположение игрока
 foods = []
-for i in range (20):
+for i in range (20): # коллиечество блоков еды
     foods.append(pygame.Rect(random.randint(0, WINDOWWIDTH-FOODSIZE), random.randint(0, WINDOWHEIGHT-FOODSIZE), FOODSIZE, FOODSIZE))
 
 # создадим переменные перемещения
@@ -67,11 +67,11 @@ while True:
                     moveUp = False
                 if event.key == K_DOWN or event.key == K_s:
                     moveDown = False
-                if event.key == K_x:
+                if event.key == K_x: # при нажатии на кнопку х помещает блок грока в случайную позицию
                     player.top = random.randint(0, WINDOWHEIGHT - player.height)
                     player.left = random.randint(0, WINDOWWIDTH - player.width)
 
-            if event.type == MOUSEBUTTONUP:
+            if event.type == MOUSEBUTTONUP: # добавление еды в ручную кликом мыши
                 foods.append(pygame.Rect(event.pos[0], event.pos[1], FOODSIZE, FOODSIZE))
 
     foodCounter +=1
