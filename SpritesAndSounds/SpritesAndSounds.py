@@ -96,5 +96,33 @@ while True:
     windowsSurface.fill(WHITE)
 
     # перемещение игрока
+    if moveDown and player.bottom<WINDOWHEIGHT:
+        player.top += MOVESPEED
+    if moveUp and player.top>0:
+        player.top -= MOVESPEED
+    if moveLeft and player.left>0:
+        player.left -= MOVESPEED
+    if moveRight and player.right<WINDOWWIDTH:
+        player.top += MOVESPEED
 
+
+    # отображение блока на поверхности
+    windowsSurface.blit(playerStrechedImage, player)
+
+    #проверка, не пересекся ли блок с каким-либо блоком еды
+    for food in foods[:]:
+        if player.colliderect(food):
+            foods.remove(food)
+            player=pygame.Rect(player.left, player.top, player.width +2, player.height +2)
+            playerStrechedImage=pygame.transform.scale(playerImage,(player.width, player.height))
+            if musicPlaying:
+                pickUpSound.play()
+
+    # отображение еды
+    for food in foods:
+        windowsSurface.blit(foodImage, food)
+
+    # вывод окна на экран
+    pygame.display.update()
+    mainClock.tick(40)
 
